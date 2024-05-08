@@ -1,41 +1,61 @@
+const elementTagName = 'firefly-button'
 class HTMLFireFlyButtonElement extends HTMLElement {
     static get observedAttributes() {
-        return ['hovered', '--hovered']
+        return [];
     }
-
-    hoveredStateName = '--hovered';
 
     constructor() {
         super();
-        this._internals = this.attachInternals();
-
-        this.addEventListener("mouseover", () => {
-            this._internals.states.add(this.hoveredStateName)
-        })
-        this.addEventListener("mouseout", () => {
-            this._internals.states.delete(this.hoveredStateName)
-        })
     }
 
     connectedCallback() {
-        console.log("connected")
+        requestAnimationFrame(() => {
+            const textContent = this.textContent;
+            const shadow = this.attachShadow({ mode: "open" });
+
+            const node = new DOMParser().parseFromString(/*html*/`
+            <a>${textContent}</a>
+            <style>
+                a {
+                    position: relative;
+                    border-radius: 1000px;
+                    padding: 1rem 4rem;
+                    background-color: #f59e0b;
+                    text-decoration: none;
+                    cursor: pointer;
+                    will-change: box-shadow;
+                    transition: box-shadow .4s;
+                }
+                
+                a:hover{
+                    box-shadow:  0px 0px 10px 0px #eab308, inset 0px 0px 5px 0px #fcd34d;
+                }
+            </style>
+            `, 'text/html');
+            const anchor = node.getElementsByTagName("a")[0];
+            anchor.addEventListener("click", (e) => {
+                // this.dispatchEvent(e);
+            })
+
+            shadow.append(...node.body.children)
+        });
+        console.log('connected');
     }
 
-    disconnectedCallback() {
+    #createDot() {
 
-        console.log("disconnected")
+    }
+    disconnectedCallback() {
+        console.log('disconnected');
     }
 
     adoptedCallback() {
-
-        console.log("addopt")
+        console.log('adopt');
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
         console.log(`Attribute ${name} has changed.`);
-
     }
-
 }
 
-customElements.define("firefly-button", HTMLFireFlyButtonElement)
+customElements.define(elementTagName, HTMLFireFlyButtonElement);

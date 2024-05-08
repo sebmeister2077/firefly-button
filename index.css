@@ -1,8 +1,0 @@
-firefly-button {
-    color: white
-}
-
-
-firefly-button:state(--hovered) {
-    color: red;
-}
