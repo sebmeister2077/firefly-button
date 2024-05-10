@@ -22,7 +22,9 @@
             document.evaluate;
 
             const btn = document.querySelector('firefly-button');
-            setTimeout(() => {}, 900);
+            btn.addEventListener('click', (e) => {
+                console.log('clicked', e);
+            });
         </script>
     </body>
 </html>
